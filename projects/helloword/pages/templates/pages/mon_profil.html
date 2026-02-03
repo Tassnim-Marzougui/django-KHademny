@@ -1,0 +1,170 @@
+<!-- pages/templates/pages/mon_profil.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Khademny</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0 auto 1rem;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (reprise de votre navbar existante) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/logo_khademny.png' %}" alt="Khademny" height="40" class="me-2">
+                Khademny
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                <a class="nav-link" href="{% url 'offres_candidats' %}">Offres</a>
+                <a class="nav-link active" href="{% url 'mon_profil' %}">Mon Profil</a>
+                <a class="nav-link" href="{% url 'logout' %}">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-header">
+        <div class="container text-center">
+            <div class="profile-avatar">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+            <h1>{{ user.username }}</h1>
+            <p class="lead">{{ profile.get_role_display }}</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <h6>Compte créé</h6>
+                    <div class="stats-number">{{ user.date_joined|date:"d/m/Y" }}</div>
+                </div>
+                
+                {% if profile.role == 'recruteur' %}
+                <div class="stats-card text-center">
+                    <h6>Offres publiées</h6>
+                    <div class="stats-number">{{ stats.offres_count }}</div>
+                </div>
+                <div class="stats-card text-center">
+                    <h6>Candidatures reçues</h6>
+                    <div class="stats-number">{{ stats.postulations_count }}</div>
+                </div>
+                {% else %}
+                <div class="stats-card text-center">
+                    <h6>Candidatures envoyées</h6>
+                    <div class="stats-number">{{ stats.postulations_count }}</div>
+                </div>
+                <div class="stats-card text-center">
+                    <h6>Entretiens planifiés</h6>
+                    <div class="stats-number">{{ stats.entretiens_count }}</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Informations du profil</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nom d'utilisateur</label>
+                                    <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" value="{{ user.email }}">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Prénom</label>
+                                    <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Nom</label>
+                                    <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Téléphone</label>
+                                    <input type="text" name="phone" class="form-control" value="{{ profile.phone }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Rôle</label>
+                                    <input type="text" class="form-control" value="{{ profile.get_role_display }}" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Adresse</label>
+                                <textarea name="address" class="form-control" rows="2">{{ profile.address }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+                                <input type="password" name="new_password" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Mettre à jour le profil
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer simplifié -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Khademny. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

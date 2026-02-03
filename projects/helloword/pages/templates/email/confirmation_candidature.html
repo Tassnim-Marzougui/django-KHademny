@@ -1,0 +1,61 @@
+<!-- templates/email/confirmation_candidature.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; }
+        .content { padding: 30px; background-color: #f9f9f9; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Khademny</h1>
+            <p>Votre partenaire recrutement</p>
+        </div>
+        
+        <div class="content">
+            <h2>Confirmation de Candidature</h2>
+            
+            <p>Bonjour <strong>{{ candidat_nom }}</strong>,</p>
+            
+            <p>Nous avons bien reçu votre candidature pour le poste :</p>
+            
+            <div style="background: white; padding: 15px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+                <h3>{{ offre_titre }}</h3>
+            </div>
+            
+            <p>Votre candidature est désormais en cours d'examen par notre équipe de recrutement.</p>
+            
+            <p><strong>Prochaines étapes :</strong></p>
+            <ul>
+                <li>Analyse de votre profil par notre équipe</li>
+                <li>Retour sous 5 à 10 jours ouvrables</li>
+                <li>Possibilité d'entretien si votre profil correspond</li>
+            </ul>
+            
+            <p>Vous pouvez suivre l'état de votre candidature depuis votre espace candidat sur Khademny.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="https://khademny.com/mes-candidatures" 
+                   style="background-color: #4CAF50; color: white; padding: 12px 30px; 
+                          text-decoration: none; border-radius: 5px;">
+                   Voir mes candidatures
+                </a>
+            </div>
+            
+            <p>Cordialement,<br>
+            <strong>L'équipe Khademny</strong></p>
+        </div>
+        
+        <div class="footer">
+            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+            <p>© 2024 Khademny. Tous droits réservés.</p>
+            <p><a href="https://khademny.com">https://khademny.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

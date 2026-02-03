@@ -1,0 +1,1773 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Khademny — Votre carrière, notre mission</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- GOOGLE FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6C63FF;
+      --secondary: #4A90E2;
+      --accent: #FF6584;
+      --dark: #121212;
+      --light: #F8F9FA;
+      --gradient: linear-gradient(135deg, #6C63FF 0%, #4A90E2 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(108, 99, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(74, 144, 226, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 50% 50%, rgba(255, 101, 132, 0.05) 0%, transparent 50%);
+      z-index: -1;
+    }
+
+    /* ---------------- CHATBOT STYLES ---------------- */
+    .chatbot-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .chatbot-toggle {
+      width: 60px;
+      height: 60px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .chatbot-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(108, 99, 255, 0.6);
+    }
+
+    .chatbot-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 350px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chatbot-window.active {
+      display: flex;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chatbot-header {
+      background: var(--gradient);
+      padding: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chatbot-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .chatbot-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .chatbot-close:hover {
+      transform: scale(1.1);
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      animation: messageSlide 0.3s ease;
+    }
+
+    @keyframes messageSlide {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-bot {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .message-user {
+      align-self: flex-end;
+      background: var(--gradient);
+      color: white;
+    }
+
+    .chatbot-input {
+      padding: 15px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .chatbot-input input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .chatbot-input input:focus {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .chatbot-send {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-send:hover {
+      transform: scale(1.1);
+    }
+
+    .chatbot-mic {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-mic:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .chatbot-mic.listening {
+      background: #FF6584;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 101, 132, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(255, 101, 132, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 101, 132, 0);
+      }
+    }
+
+    .voice-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .voice-indicator.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .voice-wave {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin: 20px 0;
+    }
+
+    .voice-bar {
+      width: 4px;
+      height: 20px;
+      background: var(--gradient);
+      border-radius: 2px;
+      animation: voiceWave 1.4s ease-in-out infinite;
+    }
+
+    .voice-bar:nth-child(1) { animation-delay: 0s; }
+    .voice-bar:nth-child(2) { animation-delay: 0.2s; }
+    .voice-bar:nth-child(3) { animation-delay: 0.4s; }
+    .voice-bar:nth-child(4) { animation-delay: 0.6s; }
+    .voice-bar:nth-child(5) { animation-delay: 0.8s; }
+
+    @keyframes voiceWave {
+      0%, 100% { height: 20px; }
+      50% { height: 40px; }
+    }
+
+    .voice-text {
+      color: white;
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 15px;
+      max-width: 250px;
+    }
+
+    .typing-indicator {
+      display: none;
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .typing-indicator span {
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; }
+      30% { opacity: 1; }
+    }
+
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .quick-reply {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-reply:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* ---------------- NAVIGATION ---------------- */
+    .navbar {
+      background: rgba(18, 18, 18, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-brand {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-link {
+      color: var(--light) !important;
+      font-weight: 500;
+      margin: 0 10px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .btn-connect {
+      background: var(--gradient);
+      border: none;
+      border-radius: 30px;
+      padding: 10px 25px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-connect:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(108, 99, 255, 0.5);
+    }
+
+    /* ---------------- HERO ---------------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 120px 0 80px;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+
+    .hero-title span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      max-width: 600px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-custom {
+      background: var(--gradient);
+      border: none;
+      border-radius: 30px;
+      padding: 14px 35px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-primary-custom:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(108, 99, 255, 0.5);
+    }
+
+    .btn-secondary-custom {
+      background: transparent;
+      border: 2px solid var(--primary);
+      border-radius: 30px;
+      padding: 14px 35px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary-custom:hover {
+      background: rgba(108, 99, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .hero-visual {
+      position: relative;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .floating-card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .card-1 {
+      top: 10%;
+      left: 5%;
+      width: 200px;
+      animation-delay: 0s;
+    }
+
+    .card-2 {
+      top: 60%;
+      right: 10%;
+      width: 180px;
+      animation-delay: 2s;
+    }
+
+    .card-3 {
+      bottom: 20%;
+      left: 15%;
+      width: 220px;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* ---------------- BARRE DE RECHERCHE ---------------- */
+    .search-container {
+      position: relative;
+    }
+
+    .search-input-group {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 8px 8px 25px;
+      backdrop-filter: blur(10px);
+    }
+
+    .search-input {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      padding: 10px 0;
+      width: 100%;
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-btn {
+      background: var(--gradient);
+      border: none;
+      border-radius: 40px;
+      padding: 12px 30px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+    }
+
+    .quick-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 8px 16px;
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .filter-btn.active {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .filter-btn[data-filter="all"] {
+      background: var(--gradient);
+    }
+
+    .filter-btn[data-filter="urgent"] {
+      background: rgba(255, 101, 132, 0.2);
+      border-color: rgba(255, 101, 132, 0.3);
+    }
+
+    .filter-btn[data-filter="remote"] {
+      background: rgba(108, 99, 255, 0.2);
+      border-color: rgba(108, 99, 255, 0.3);
+    }
+
+    .filter-btn[data-filter="cdi"] {
+      background: rgba(74, 144, 226, 0.2);
+      border-color: rgba(74, 144, 226, 0.3);
+    }
+
+    .filter-btn[data-filter="freelance"] {
+      background: rgba(255, 193, 7, 0.2);
+      border-color: rgba(255, 193, 7, 0.3);
+    }
+
+    /* ---------------- OFFERS SECTION ---------------- */
+    .offers-section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .offer-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s ease;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .offer-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .offer-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .offer-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: white;
+    }
+
+    .offer-card p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 10px;
+    }
+
+    .offer-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .badge-status {
+      background: var(--gradient);
+      color: white;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .btn-test {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 12px 25px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-test:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ---------------- FEATURES SECTION ---------------- */
+    .features-section {
+      padding: 100px 0;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-card {
+      text-align: center;
+      padding: 40px 20px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 25px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+    }
+
+    .feature-card h4 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ---------------- FOOTER ---------------- */
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 60px 0 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links h5 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      background: var(--gradient);
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 40px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    /* ---------------- ANIMATIONS ---------------- */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ---------------- RESPONSIVE ---------------- */
+    @media (max-width: 992px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+      
+      .hero-visual {
+        height: 400px;
+        margin-top: 50px;
+      }
+      
+      .section-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2.2rem;
+      }
+      
+      .hero-btns {
+        justify-content: center;
+      }
+      
+      .chatbot-window {
+        width: 300px;
+        height: 450px;
+      }
+      
+      .chatbot-container {
+        bottom: 20px;
+        right: 20px;
+      }
+      
+      .search-input-group {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      .search-btn {
+        margin-top: 10px;
+        width: 100%;
+        border-radius: 30px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .btn-primary-custom, .btn-secondary-custom {
+        padding: 12px 25px;
+        font-size: 1rem;
+      }
+      
+      .chatbot-window {
+        width: 280px;
+        height: 400px;
+        right: -20px;
+      }
+      
+      .quick-filters {
+        gap: 5px;
+      }
+      
+      .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">Khademny</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon text-light"><i class="fas fa-bars"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Accueil</a>
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link" href="http://127.0.0.1:8000/entreprises/">Entreprises</a>
+          </li>
+          
+          <li class="nav-item ms-2">
+            <a href="{% url 'login' %}" class="btn-connect" id="espace-recruteur-nav">Connexion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="hero-content">
+            <h1 class="hero-title">Votre carrière, <span>notre mission</span></h1>
+            <p class="hero-subtitle">Khademny révolutionne le recrutement en connectant les talents aux opportunités qui leur correspondent vraiment. Notre technologie d'IA analyse votre profil pour vous proposer des offres sur mesure.</p>
+            <div class="hero-btns">
+              <a href="#offers" class="btn-primary-custom" id="explorer-offres">Explorer les offres</a>
+              <a href="{% url 'login' %}" class="btn-secondary-custom" id="espace-recruteur-hero">Espace recruteur</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-visual">
+            <div class="floating-card card-1">
+              <h5>Développeur Full Stack</h5>
+              <p>Paris • CDI</p>
+              <span class="badge-status">Nouveau</span>
+            </div>
+            <div class="floating-card card-2">
+              <h5>Data Scientist</h5>
+              <p>Lyon • CDI</p>
+              <span class="badge-status">Urgent</span>
+            </div>
+            <div class="floating-card card-3">
+              <h5>UX Designer</h5>
+              <p>Télétravail • Freelance</p>
+              <span class="badge-status">Populaire</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFERS SECTION -->
+  <section class="offers-section" id="offers">
+    <div class="container">
+      <h2 class="section-title">Nos <span>offres d'emploi</span></h2>
+      
+      <!-- BARRE DE RECHERCHE -->
+      <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+          <div class="search-container">
+            <div class="search-input-group d-flex align-items-center">
+              <input 
+                type="text" 
+                id="searchOffers" 
+                class="search-input" 
+                placeholder="Rechercher une offre par mot-clé, lieu ou compétence..."
+              >
+              <button id="searchButton" class="search-btn ms-2">
+                <i class="fas fa-search"></i> Rechercher
+              </button>
+            </div>
+            
+            <!-- Filtres rapides -->
+            <div class="quick-filters mt-3">
+              <button class="filter-btn" data-filter="all">
+                Toutes
+              </button>
+              <button class="filter-btn" data-filter="urgent">
+                <i class="fas fa-fire"></i> Urgent
+              </button>
+              <button class="filter-btn" data-filter="remote">
+                <i class="fas fa-home"></i> Télétravail
+              </button>
+              <button class="filter-btn" data-filter="cdi">
+                CDI
+              </button>
+              <button class="filter-btn" data-filter="freelance">
+                Freelance
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row offers-container">
+        {% for offre in offres %}
+        <div class="col-lg-6 mb-4 offer-item" 
+             data-title="{{ offre.titre|lower }}"
+             data-description="{{ offre.description|lower }}"
+             data-lieu="{{ offre.lieu|lower }}"
+             data-type="{{ offre.type|default:'cdi'|lower }}"
+             data-status="{{ offre.status|default:'normal' }}">
+          <div class="offer-card">
+            <h3>{{ offre.titre }}</h3>
+            <p>{{ offre.description|truncatewords:30 }}</p>
+            
+            <div class="offer-meta">
+              <div class="meta-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ offre.lieu }}</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>{{ offre.salaire }}</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>{{ offre.date_expiration }}</span>
+              </div>
+            </div>
+            
+            <span class="badge-status">Active 🔥</span>
+            
+            <a href="{% url 'candidat_page' offre.id %}" class="btn-test">
+              <i class="fas fa-bolt"></i> Tester la compatibilité CV
+            </a>
+          </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12 text-center no-results">
+          <p class="text-light">Aucune offre disponible pour le moment.</p>
+        </div>
+        {% endfor %}
+        
+        <!-- Message pour aucun résultat -->
+        <div class="col-12 text-center no-results-message" style="display: none;">
+          <div class="text-center py-5">
+            <i class="fas fa-search fa-3x mb-3" style="color: rgba(255,255,255,0.3);"></i>
+            <h4 class="text-light mb-3">Aucune offre ne correspond à votre recherche</h4>
+            <p class="text-light opacity-75">Essayez avec d'autres mots-clés ou modifiez vos filtres</p>
+            <button id="resetSearch" class="btn mt-3 search-btn">
+              Réinitialiser la recherche
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">Pourquoi <span>choisir Khademny</span></h2>
+      
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h4>IA Intelligente</h4>
+            <p>Notre algorithme analyse votre profil pour trouver les offres qui correspondent parfaitement à vos compétences et aspirations.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h4>Rapidité</h4>
+            <p>Recevez des propositions pertinentes en quelques minutes seulement après avoir déposé votre CV.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4>Confidentialité</h4>
+            <p>Vos données sont sécurisées et vous contrôlez complètement qui a accès à votre profil.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <div class="footer-logo">Khademny</div>
+          <p>La plateforme de recrutement intelligente qui connecte les talents aux meilleures opportunités.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 mb-4">
+          <div class="footer-links">
+            <h5>Navigation</h5>
+            <ul>
+              <li><a href="#">Accueil</a></li>
+              <li><a href="#">Offres</a></li>
+              <li><a href="#">Entreprises</a></li>
+              <li><a href="#">À propos</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-4 mb-4">
+          <div class="footer-links">
+            <h5>Entreprises</h5>
+            <ul>
+              <li><a href="#">Publier une offre</a></li>
+              <li><a href="#">Solutions RH</a></li>
+              <li><a href="#">Tarifs</a></li>
+              <li><a href="#">Témoignages</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-4 mb-4">
+          <div class="footer-links">
+            <h5>Support</h5>
+            <ul>
+              <li><a href="#">Centre d'aide</a></li>
+              <li><a href="#">Contactez-nous</a></li>
+              <li><a href="#">Mentions légales</a></li>
+              <li><a href="#">Politique de confidentialité</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        © 2025 Khademny — Tous droits réservés
+      </div>
+    </div>
+  </footer>
+
+  <!-- CHATBOT -->
+  <div class="chatbot-container">
+    <button class="chatbot-toggle" id="chatbotToggle">
+      <i class="fas fa-robot"></i>
+    </button>
+    
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <h3>Assistant Khademny</h3>
+        <button class="chatbot-close" id="chatbotClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="message message-bot">
+          🎤 <strong>Assistant vocal Khademny</strong><br>
+          Je peux exécuter des commandes pour vous !<br><br>
+          <strong>Commandes disponibles :</strong><br>
+          • "Ouvrir espace recruteur"<br>
+          • "Explorer les offres"<br>
+          • "Rechercher développeur"<br>
+          • "Filtrer télétravail"<br>
+          • "Aide commandes"
+        </div>
+      </div>
+      
+      <div class="typing-indicator" id="typingIndicator">
+        <span>.</span><span>.</span><span>.</span>
+      </div>
+      
+      <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Tapez votre message...">
+        <button class="chatbot-mic" id="chatbotMic" title="Parler au chatbot">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button class="chatbot-send" id="chatbotSend">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICATEUR VOCAL -->
+  <div class="voice-indicator" id="voiceIndicator">
+    <div class="voice-wave">
+      <div class="voice-bar"></div>
+      <div class="voice-bar"></div>
+      <div class="voice-bar"></div>
+      <div class="voice-bar"></div>
+      <div class="voice-bar"></div>
+    </div>
+    <div class="voice-text" id="voiceText">Parlez maintenant...</div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Chatbot functionality - VERSION AMÉLIORÉE
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatbotToggle = document.getElementById('chatbotToggle');
+      const chatbotWindow = document.getElementById('chatbotWindow');
+      const chatbotClose = document.getElementById('chatbotClose');
+      const chatbotMessages = document.getElementById('chatbotMessages');
+      const chatbotInput = document.getElementById('chatbotInput');
+      const chatbotSend = document.getElementById('chatbotSend');
+      const chatbotMic = document.getElementById('chatbotMic');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const voiceIndicator = document.getElementById('voiceIndicator');
+      const voiceText = document.getElementById('voiceText');
+
+      // Fonction pour normaliser le texte (enlever accents, mettre en minuscule)
+      function normalizeText(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      }
+
+      // Dictionnaire de commandes vocales avec plusieurs variantes
+      const voiceCommands = [
+        // Navigation - Espace recruteur avec plusieurs variantes
+        {
+          keywords: ['ouvrir', 'espace', 'recruteur', 'connecter', 'connexion', 'recru', 'connect', 'login'],
+          action: () => {
+            const btn = document.getElementById('espace-recruteur-nav');
+            if (btn) {
+              btn.click();
+              return "J'ouvre l'espace recruteur pour vous...";
+            }
+            return "Je ne trouve pas le bouton espace recruteur.";
+          },
+          response: "J'ouvre l'espace recruteur pour vous..."
+        },
+        
+        // Explorer les offres
+        {
+          keywords: ['explorer', 'offres', 'offre', 'emploi', 'voir', 'afficher', 'montrer'],
+          action: () => {
+            const btn = document.getElementById('explorer-offres');
+            if (btn) {
+              btn.click();
+              return "Je vous montre toutes les offres disponibles...";
+            }
+            return "Je ne trouve pas le bouton explorer les offres.";
+          },
+          response: "Je vous montre toutes les offres disponibles..."
+        },
+        
+        // Rechercher développeur
+        {
+          keywords: ['rechercher', 'développeur', 'dev', 'developer', 'programmeur'],
+          action: () => {
+            const searchInput = document.getElementById('searchOffers');
+            const searchButton = document.getElementById('searchButton');
+            if (searchInput && searchButton) {
+              searchInput.value = 'développeur';
+              searchButton.click();
+              return "Je recherche les offres de développeur...";
+            }
+            return "Je ne trouve pas la barre de recherche.";
+          },
+          response: "Je recherche les offres de développeur..."
+        },
+        
+        // Filtrer télétravail
+        {
+          keywords: ['filtrer', 'télétravail', 'remote', 'à distance', 'chez soi'],
+          action: () => {
+            const filterBtn = document.querySelector('.filter-btn[data-filter="remote"]');
+            if (filterBtn) {
+              filterBtn.click();
+              return "Je filtre pour afficher uniquement les offres en télétravail...";
+            }
+            return "Je ne trouve pas le filtre télétravail.";
+          },
+          response: "Je filtre pour afficher uniquement les offres en télétravail..."
+        },
+        
+        // Aide commandes
+        {
+          keywords: ['aide', 'commandes', 'aider', 'assistance', 'comment', 'quoi', 'que'],
+          action: () => {
+            return "🎤 <strong>Assistant vocal Khademny - Commandes disponibles :</strong><br><br>" +
+                   "<strong>Navigation :</strong><br>" +
+                   "• Ouvrir espace recruteur (ou 'connexion', 'se connecter')<br>" +
+                   "• Explorer les offres (ou 'voir offres', 'afficher emplois')<br>" +
+                   "• Aller à la section offres<br><br>" +
+                   "<strong>Recherche :</strong><br>" +
+                   "• Rechercher développeur<br>" +
+                   "• Rechercher data<br>" +
+                   "• Rechercher designer<br><br>" +
+                   "<strong>Filtres :</strong><br>" +
+                   "• Filtrer télétravail<br>" +
+                   "• Filtrer urgent<br>" +
+                   "• Filtrer freelance<br>" +
+                   "• Tout afficher<br><br>" +
+                   "<strong>Astuce :</strong> Parlez clairement et simplement !";
+          },
+          response: "Voici les commandes disponibles..."
+        }
+      ];
+
+      // Vérifier la compatibilité
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let recognition = null;
+      let isListening = false;
+
+      // Initialiser la reconnaissance vocale si disponible
+      if (SpeechRecognition) {
+        try {
+          recognition = new SpeechRecognition();
+          recognition.continuous = false;
+          recognition.interimResults = false;
+          recognition.lang = 'fr-FR';
+
+          recognition.onstart = function() {
+            isListening = true;
+            chatbotMic.classList.add('listening');
+            voiceIndicator.classList.add('active');
+            voiceText.textContent = "Je vous écoute...";
+          };
+
+          recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            voiceText.textContent = transcript;
+            
+            // Arrêter l'écoute après avoir obtenu un résultat
+            setTimeout(() => {
+              if (isListening) {
+                recognition.stop();
+              }
+            }, 500);
+          };
+
+          recognition.onerror = function(event) {
+            console.log('Erreur reconnaissance:', event.error);
+            isListening = false;
+            chatbotMic.classList.remove('listening');
+            voiceIndicator.classList.remove('active');
+            
+            // Ne pas afficher de message pour les erreurs d'annulation
+            if (event.error !== 'aborted' && event.error !== 'no-speech') {
+              addMessage("Erreur de microphone. Veuillez vérifier vos permissions.", 'bot');
+            }
+          };
+
+          recognition.onend = function() {
+            isListening = false;
+            chatbotMic.classList.remove('listening');
+            voiceIndicator.classList.remove('active');
+            
+            const transcript = voiceText.textContent;
+            if (transcript && transcript !== "Parlez maintenant..." && transcript !== "Je vous écoute...") {
+              processVoiceCommand(transcript);
+            }
+            voiceText.textContent = "Parlez maintenant...";
+          };
+
+        } catch (error) {
+          console.error('Erreur initialisation:', error);
+          chatbotMic.style.display = 'none';
+          addMessage("⚠️ La reconnaissance vocale n'est pas disponible sur ce navigateur.", 'bot');
+        }
+      } else {
+        chatbotMic.style.display = 'none';
+        addMessage("⚠️ La reconnaissance vocale n'est pas supportée par ce navigateur. Veuillez utiliser Chrome ou Edge.", 'bot');
+      }
+
+      // Traiter une commande vocale
+      function processVoiceCommand(command) {
+        // Ajouter le message utilisateur
+        addMessage(command, 'user');
+        
+        // Normaliser la commande
+        const normalizedCommand = normalizeText(command);
+        
+        // Chercher la commande correspondante
+        let bestMatch = null;
+        let bestScore = 0;
+        
+        for (const cmd of voiceCommands) {
+          let score = 0;
+          for (const keyword of cmd.keywords) {
+            const normalizedKeyword = normalizeText(keyword);
+            // Vérifier si le mot-clé est dans la commande
+            if (normalizedCommand.includes(normalizedKeyword)) {
+              score++;
+            }
+          }
+          
+          // Si cette commande a un meilleur score
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = cmd;
+          }
+        }
+        
+        // Si on a une correspondance avec au moins 1 mot-clé
+        if (bestMatch && bestScore > 0) {
+          // Afficher l'indicateur de frappe
+          typingIndicator.style.display = 'flex';
+          scrollToBottom();
+          
+          // Exécuter la commande après un délai
+          setTimeout(() => {
+            typingIndicator.style.display = 'none';
+            const response = bestMatch.action();
+            addMessage(response, 'bot');
+            scrollToBottom();
+            
+            // Lire la réponse si supporté
+            if ('speechSynthesis' in window) {
+              const cleanText = response.replace(/<[^>]*>/g, '').replace(/🎤|📋|•/g, '');
+              const speech = new SpeechSynthesisUtterance(cleanText);
+              speech.lang = 'fr-FR';
+              speech.rate = 1.0;
+              window.speechSynthesis.speak(speech);
+            }
+          }, 1000);
+        } else {
+          // Réponse par défaut
+          typingIndicator.style.display = 'flex';
+          scrollToBottom();
+          
+          setTimeout(() => {
+            typingIndicator.style.display = 'none';
+            const response = "Je n'ai pas bien compris. Essayez une commande comme 'ouvrir espace recruteur', 'explorer les offres' ou dites 'aide commandes' pour voir la liste.";
+            addMessage(response, 'bot');
+            scrollToBottom();
+          }, 1000);
+        }
+      }
+
+      // Toggle chatbot window
+      chatbotToggle.addEventListener('click', function() {
+        chatbotWindow.classList.toggle('active');
+        chatbotInput.focus();
+      });
+
+      // Close chatbot window
+      chatbotClose.addEventListener('click', function() {
+        chatbotWindow.classList.remove('active');
+      });
+
+      // Activer/désactiver la reconnaissance vocale
+      chatbotMic.addEventListener('click', function() {
+        if (!recognition) {
+          addMessage("La reconnaissance vocale n'est pas disponible sur ce navigateur.", 'bot');
+          return;
+        }
+        
+        if (!isListening) {
+          voiceText.textContent = "Parlez maintenant...";
+          try {
+            recognition.start();
+          } catch (error) {
+            console.error('Erreur démarrage:', error);
+            addMessage("Impossible de démarrer le microphone. Veuillez vérifier les permissions de votre navigateur.", 'bot');
+          }
+        } else {
+          recognition.stop();
+        }
+      });
+
+      // Envoyer un message texte
+      chatbotSend.addEventListener('click', function() {
+        sendTextMessage();
+      });
+
+      chatbotInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendTextMessage();
+        }
+      });
+
+      function sendTextMessage() {
+        const message = chatbotInput.value.trim();
+        if (message === '') return;
+
+        addMessage(message, 'user');
+        chatbotInput.value = '';
+        
+        // Simuler une réponse
+        typingIndicator.style.display = 'flex';
+        scrollToBottom();
+        
+        setTimeout(() => {
+          typingIndicator.style.display = 'none';
+          
+          const responses = [
+            "Pour utiliser les commandes vocales, cliquez sur le bouton microphone 🎤 et parlez clairement.",
+            "Je suis optimisé pour la reconnaissance vocale. Essayez de dire 'ouvrir espace recruteur' ou 'aide commandes'.",
+            "Utilisez votre voix pour contrôler le site ! Cliquez sur le bouton microphone et parlez."
+          ];
+          const response = responses[Math.floor(Math.random() * responses.length)];
+          
+          addMessage(response, 'bot');
+          scrollToBottom();
+        }, 1000);
+      }
+
+      // Ajouter un message au chat
+      function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${sender}`;
+        
+        // Ajouter icône microphone pour messages vocaux
+        if (sender === 'user' && recognition) {
+          const icon = document.createElement('i');
+          icon.className = 'fas fa-microphone me-2';
+          icon.style.fontSize = '0.8rem';
+          messageDiv.appendChild(icon);
+        }
+        
+        // Gérer HTML
+        if (text.includes('<')) {
+          messageDiv.innerHTML = text;
+        } else {
+          messageDiv.textContent = text;
+        }
+        
+        chatbotMessages.appendChild(messageDiv);
+        scrollToBottom();
+      }
+
+      // Scroll automatique
+      function scrollToBottom() {
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+      }
+    });
+
+    // Fonctionnalité de recherche et filtrage
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchOffers');
+      const searchButton = document.getElementById('searchButton');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const offerItems = document.querySelectorAll('.offer-item');
+      const noResultsElement = document.querySelector('.no-results');
+      const noResultsMessage = document.querySelector('.no-results-message');
+      const resetSearchBtn = document.getElementById('resetSearch');
+      
+      // Fonction de recherche
+      function searchOffers() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let hasResults = false;
+        let visibleCount = 0;
+        
+        offerItems.forEach(item => {
+          const title = item.getAttribute('data-title');
+          const description = item.getAttribute('data-description');
+          const lieu = item.getAttribute('data-lieu');
+          const type = item.getAttribute('data-type');
+          
+          const matchesSearch = searchTerm === '' || 
+            title.includes(searchTerm) || 
+            description.includes(searchTerm) || 
+            lieu.includes(searchTerm);
+          
+          // Vérifier aussi le filtre actif
+          const activeFilter = document.querySelector('.filter-btn.active');
+          const filterValue = activeFilter ? activeFilter.getAttribute('data-filter') : 'all';
+          
+          const matchesFilter = filterValue === 'all' || 
+            (filterValue === 'urgent' && item.getAttribute('data-status') === 'urgent') ||
+            (filterValue === 'remote' && lieu.includes('télétravail')) ||
+            (filterValue === 'cdi' && type.includes('cdi')) ||
+            (filterValue === 'freelance' && type.includes('freelance'));
+          
+          if (matchesSearch && matchesFilter) {
+            item.style.display = 'block';
+            item.style.animation = 'fadeIn 0.5s ease';
+            hasResults = true;
+            visibleCount++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        
+        // Gérer l'affichage du message "aucun résultat"
+        if (noResultsElement) {
+          noResultsElement.style.display = hasResults ? 'none' : 'block';
+        }
+        
+        if (noResultsMessage) {
+          if (!hasResults && (searchTerm !== '' || document.querySelector('.filter-btn.active').getAttribute('data-filter') !== 'all')) {
+            noResultsMessage.style.display = 'block';
+          } else {
+            noResultsMessage.style.display = 'none';
+          }
+        }
+        
+        // Afficher le nombre de résultats trouvés
+        updateResultsCount(visibleCount);
+      }
+      
+      // Mettre à jour le compteur de résultats
+      function updateResultsCount(count) {
+        const resultsCounter = document.getElementById('resultsCounter');
+        if (!resultsCounter) {
+          // Créer le compteur s'il n'existe pas
+          const counter = document.createElement('div');
+          counter.id = 'resultsCounter';
+          counter.className = 'text-center mb-4';
+          counter.style.color = 'rgba(255,255,255,0.7)';
+          counter.style.fontSize = '0.9rem';
+          
+          const searchContainer = document.querySelector('.search-container');
+          const quickFilters = document.querySelector('.quick-filters');
+          if (searchContainer && quickFilters) {
+            searchContainer.insertBefore(counter, quickFilters);
+          }
+        }
+        
+        const totalOffers = offerItems.length;
+        const counterElement = document.getElementById('resultsCounter');
+        if (counterElement) {
+          if (count === totalOffers) {
+            counterElement.innerHTML = `<i class="fas fa-check-circle me-2"></i>${count} offre${count > 1 ? 's' : ''} disponible${count > 1 ? 's' : ''}`;
+          } else {
+            counterElement.innerHTML = `<i class="fas fa-filter me-2"></i>${count} offre${count > 1 ? 's' : ''} sur ${totalOffers} correspond${count > 1 ? 'ent' : ''} à votre recherche`;
+          }
+        }
+      }
+      
+      // Fonction pour réinitialiser les filtres
+      function resetFilters() {
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.getAttribute('data-filter') === 'all') {
+            btn.classList.add('active');
+          }
+        });
+        searchInput.value = '';
+        searchOffers();
+      }
+      
+      // Événement de recherche lors de la saisie
+      searchInput.addEventListener('input', searchOffers);
+      
+      // Événement de recherche sur le bouton
+      searchButton.addEventListener('click', searchOffers);
+      
+      // Événement de recherche avec Entrée
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          searchOffers();
+        }
+      });
+      
+      // Gestion des filtres rapides
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Retirer la classe active de tous les boutons
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          // Ajouter la classe active au bouton cliqué
+          this.classList.add('active');
+          
+          // Appliquer le filtre
+          searchOffers();
+        });
+      });
+      
+      // Initialiser le bouton "Toutes" comme actif
+      const allFilter = document.querySelector('.filter-btn[data-filter="all"]');
+      if (allFilter) {
+        allFilter.classList.add('active');
+      }
+      
+      // Réinitialiser la recherche
+      if (resetSearchBtn) {
+        resetSearchBtn.addEventListener('click', resetFilters);
+      }
+      
+      // Réinitialiser également via le bouton dans le message de résultats
+      document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'resetSearch') {
+          resetFilters();
+        }
+      });
+      
+      // Initialiser la recherche
+      searchOffers();
+    });
+  </script>
+</body>
+</html>

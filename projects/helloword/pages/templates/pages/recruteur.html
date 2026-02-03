@@ -1,0 +1,477 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Recruteur - Khademny</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A90E2;
+            --accent: #FF6584;
+            --dark: #121212;
+            --light: #F8F9FA;
+            --gradient: linear-gradient(135deg, #6C63FF 0%, #4A90E2 100%);
+            --gradient-accent: linear-gradient(135deg, #FF6584 0%, #FF9A8B 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Arrière-plan animé */
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(108, 99, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 101, 132, 0.1) 0%, transparent 50%);
+            animation: gradientPulse 15s ease infinite;
+        }
+
+        @keyframes gradientPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Particules */
+        .particles-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gradient);
+            opacity: 0;
+            animation: particleFloat 20s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navbar améliorée */
+        .navbar {
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(18, 18, 18, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(108, 99, 255, 0.8), 0 0 20px rgba(108, 99, 255, 0.6);
+            }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        /* Cards améliorées */
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .card-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        /* Boutons améliorés */
+        .btn-gradient {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left 0.7s ease;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+        }
+
+        /* Footer amélioré */
+        footer {
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 30px 0;
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+        }
+
+        /* Animations supplémentaires */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 100px 20px 60px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Arrière-plan animé -->
+<div class="animated-background">
+    <div class="gradient-bg"></div>
+    <div class="particles-container" id="particles"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <img src="{% static 'images/logo_khademny.png' %}" alt="Logo Khademny" class="logo">
+        <a class="navbar-brand" href="#">Khademny</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="{% url 'home' %}">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'ajout_offre' %}">Ajouter Offre</a></li>
+                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/pages/offres-candidats/">Offres + Candidats</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-content">
+        <h1>Espace Recruteur Khademny</h1>
+        <p>Gérez vos offres et découvrez les talents qui correspondent à vos besoins</p>
+    </div>
+</div>
+
+<!-- Cards -->
+<div class="container mt-5">
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100 floating">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-plus-circle me-2"></i>Ajouter une Offre</h5>
+                    <p class="card-text">Publiez une nouvelle offre d'emploi pour attirer les talents qui correspondent à votre entreprise.</p>
+                    <a href="{% url 'ajout_offre' %}" class="btn btn-gradient">➕ Nouvelle Offre</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 floating" style="animation-delay: 2s;">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-users me-2"></i>Offres & Candidats</h5>
+                    <p class="card-text">Consultez toutes vos offres et les candidats qui ont postulé. Analysez les profils et trouvez la perle rare.</p>
+                    <a href="http://127.0.0.1:8000/pages/offres-candidats/" class="btn btn-gradient">📄 Voir les Candidatures</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Khademny - Tassnim Marzougui</p>
+        <p class="mt-2" style="font-size: 0.9rem; opacity: 0.7;">Plateforme de recrutement intelligente</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Génération de particules d'arrière-plan
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 40;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Taille aléatoire
+            const size = Math.random() * 20 + 5;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Position de départ aléatoire
+            particle.style.left = `${Math.random() * 100}%`;
+            
+            // Délai d'animation aléatoire
+            particle.style.animationDelay = `${Math.random() * 20}s`;
+            
+            // Durée d'animation aléatoire
+            const duration = 15 + Math.random() * 15;
+            particle.style.animationDuration = `${duration}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Effet de navbar au scroll
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+        createParticles();
+    });
+</script>
+</body>
+</html>

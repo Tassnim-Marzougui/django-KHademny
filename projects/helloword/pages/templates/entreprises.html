@@ -1,0 +1,1375 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Entreprises Partenaires - Khademny</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A90E2;
+            --accent: #FF6584;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #F8F9FA;
+            --gray: #2d2d2d;
+            --gradient: linear-gradient(135deg, #6C63FF 0%, #4A90E2 100%);
+            --gradient-accent: linear-gradient(135deg, #FF6584 0%, #FF9A8B 100%);
+        }
+
+        * {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif;}
+
+        body {
+            min-height:100vh;
+            display:flex;
+            flex-direction: column;
+            background-color: var(--dark);
+            color: var(--light);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(108, 99, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 101, 132, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(74, 144, 226, 0.12) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand i {
+            font-size: 2rem;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .navbar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-link:hover {
+            color: white;
+            background: rgba(108, 99, 255, 0.15);
+        }
+
+        .navbar-link.active {
+            color: var(--light);
+            background: var(--gradient);
+        }
+
+        .navbar-link i {
+            margin-right: 8px;
+        }
+
+        .navbar-cta {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 101, 132, 0.3);
+        }
+
+        .navbar-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 101, 132, 0.5);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ===== SPONSORS SECTION ===== */
+        .sponsors-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .sponsors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .sponsor-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 3px 10px rgba(255, 255, 255, 0.05) inset;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sponsor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-accent);
+        }
+
+        .sponsor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 5px 15px rgba(255, 101, 132, 0.2) inset;
+        }
+
+        .sponsor-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .sponsor-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+        }
+
+        .sponsor-info h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--light);
+        }
+
+        .sponsor-info .sponsor-tag {
+            display: inline-block;
+            background: var(--gradient-accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(255, 101, 132, 0.3);
+        }
+
+        .sponsor-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .sponsor-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .detail-item i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .sponsor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .open-positions {
+            background: var(--gradient);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .open-positions:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+        }
+
+        .view-company {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-company:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* ===== ALL COMPANIES SECTION ===== */
+        .companies-section {
+            margin-bottom: 80px;
+        }
+
+        .filter-bar {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-tag {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .filter-tag:hover {
+            background: rgba(108, 99, 255, 0.2);
+            color: white;
+        }
+
+        .filter-tag.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .company-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                0 3px 10px rgba(255, 255, 255, 0.05) inset;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 5px 15px rgba(255, 255, 255, 0.08) inset;
+        }
+
+        .company-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .company-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .company-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .company-slogan {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .company-industry {
+            display: inline-block;
+            background: rgba(74, 144, 226, 0.2);
+            color: var(--secondary);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .company-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .company-bio {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .company-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .company-location i {
+            color: var(--accent);
+        }
+
+        .company-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-jobs {
+            background: var(--gradient);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-jobs:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .follow-btn {
+            background: transparent;
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .follow-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            width: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: var(--gradient);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .sponsors-grid,
+            .companies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .navbar-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Menu mobile toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                right: 2rem;
+                top: 1.2rem;
+            }
+
+            .navbar-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .navbar-menu.active {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-gem"></i>
+                Khademny
+            </a>
+            
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="navbar-menu" id="navbarMenu">
+                <a href="/" class="navbar-link">
+                    <i class="fas fa-home"></i>Accueil
+                </a>
+                
+                <a href="/entreprises" class="navbar-link active">
+                    <i class="fas fa-building"></i>Entreprises
+                </a>
+                
+               
+                
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Entreprises Partenaires</h1>
+            <p class="page-subtitle">
+                Découvrez nos entreprises partenaires et sponsors qui recrutent activement des talents.
+                Trouvez l'entreprise qui correspond à vos aspirations professionnelles.
+            </p>
+        </div>
+
+        <!-- Sponsors Section -->
+        <section class="sponsors-section">
+            <h2 class="section-title">Entreprises Sponsorisées</h2>
+            <div class="sponsors-grid">
+                <!-- Sponsor 1 -->
+                <div class="sponsor-card">
+                    <div class="sponsor-header">
+                        <div class="sponsor-logo">
+                            <i class="fab fa-microsoft"></i>
+                        </div>
+                        <div class="sponsor-info">
+                            <h3>Microsoft France</h3>
+                            <span class="sponsor-tag">Sponsor Platine</span>
+                        </div>
+                    </div>
+                    <p class="sponsor-description">
+                        Leader mondial des solutions informatiques, Microsoft innove dans le cloud, l'IA et les logiciels d'entreprise. Rejoignez-nous pour façonner l'avenir du numérique.
+                    </p>
+                    <div class="sponsor-details">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>15,000+ employés en France</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Paris, Lyon, Toulouse</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-industry"></i>
+                            <span>Technologie & Cloud</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-star"></i>
+                            <span>Note employeur: 4.8/5</span>
+                        </div>
+                    </div>
+                    <div class="sponsor-footer">
+                        <a href="#" class="open-positions">12 postes ouverts</a>
+                        <a href="#" class="view-company">Visiter le site <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Sponsor 2 -->
+                <div class="sponsor-card">
+                    <div class="sponsor-header">
+                        <div class="sponsor-logo">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <div class="sponsor-info">
+                            <h3>Google France</h3>
+                            <span class="sponsor-tag">Sponsor Or</span>
+                        </div>
+                    </div>
+                    <p class="sponsor-description">
+                        Google révolutionne la recherche en ligne et les services numériques. Notre mission est d'organiser l'information à l'échelle mondiale et de la rendre accessible et utile à tous.
+                    </p>
+                    <div class="sponsor-details">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>8,500+ employés en France</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Paris, Montpellier</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-industry"></i>
+                            <span>Recherche & IA</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-star"></i>
+                            <span>Note employeur: 4.9/5</span>
+                        </div>
+                    </div>
+                    <div class="sponsor-footer">
+                        <a href="#" class="open-positions">18 postes ouverts</a>
+                        <a href="#" class="view-company">Visiter le site <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Sponsor 3 -->
+                <div class="sponsor-card">
+                    <div class="sponsor-header">
+                        <div class="sponsor-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="sponsor-info">
+                            <h3>BNP Paribas</h3>
+                            <span class="sponsor-tag">Sponsor Argent</span>
+                        </div>
+                    </div>
+                    <p class="sponsor-description">
+                        Première banque de la zone euro, BNP Paribas offre des solutions financières innovantes. Nous transformons le secteur bancaire avec la technologie et l'expertise humaine.
+                    </p>
+                    <div class="sponsor-details">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>95,000+ employés</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>75 agences en France</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-industry"></i>
+                            <span>Banque & Finance</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-star"></i>
+                            <span>Note employeur: 4.2/5</span>
+                        </div>
+                    </div>
+                    <div class="sponsor-footer">
+                        <a href="#" class="open-positions">25 postes ouverts</a>
+                        <a href="#" class="view-company">Visiter le site <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Companies Section -->
+        <section class="companies-section">
+            <h2 class="section-title">Toutes les Entreprises</h2>
+            
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <h3 class="filter-title">Filtrer par secteur :</h3>
+                <div class="filter-tags">
+                    <span class="filter-tag active">Tous</span>
+                    <span class="filter-tag">Technologie</span>
+                    <span class="filter-tag">Finance</span>
+                    <span class="filter-tag">Santé</span>
+                    <span class="filter-tag">Énergie</span>
+                    <span class="filter-tag">Retail</span>
+                    <span class="filter-tag">Consulting</span>
+                    <span class="filter-tag">Industrie</span>
+                </div>
+            </div>
+
+            <!-- Companies Grid -->
+            <div class="companies-grid">
+                <!-- Company 1 -->
+                <div class="company-card">
+                    <div class="company-card-header">
+                        <div class="company-logo">
+                            <i class="fab fa-apple"></i>
+                        </div>
+                        <div>
+                            <h3 class="company-name">Apple France</h3>
+                            <p class="company-slogan">Think Different</p>
+                        </div>
+                    </div>
+                    <span class="company-industry">Technologie & Retail</span>
+                    <div class="company-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">2,500+</div>
+                            <div class="stat-label">Employés</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Postes ouverts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.7</div>
+                            <div class="stat-label">Note</div>
+                        </div>
+                    </div>
+                    <p class="company-bio">
+                        Apple révolutionne l'industrie technologique avec des produits innovants comme l'iPhone, iPad et Mac. Rejoignez notre équipe pour créer l'avenir.
+                    </p>
+                    <div class="company-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris, Aix-en-Provence, Bordeaux</span>
+                    </div>
+                    <div class="company-actions">
+                        <a href="#" class="view-jobs">Voir les postes</a>
+                        <button class="follow-btn">Suivre</button>
+                    </div>
+                </div>
+
+                <!-- Company 2 -->
+                <div class="company-card">
+                    <div class="company-card-header">
+                        <div class="company-logo">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div>
+                            <h3 class="company-name">Renault Group</h3>
+                            <p class="company-slogan">La mobilité de demain</p>
+                        </div>
+                    </div>
+                    <span class="company-industry">Automobile</span>
+                    <div class="company-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">40,000+</div>
+                            <div class="stat-label">Employés</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">32</div>
+                            <div class="stat-label">Postes ouverts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.1</div>
+                            <div class="stat-label">Note</div>
+                        </div>
+                    </div>
+                    <p class="company-bio">
+                        Leader français de l'automobile, Renault innove dans les véhicules électriques et la mobilité durable. Participez à la révolution de la mobilité.
+                    </p>
+                    <div class="company-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Boulogne-Billancourt, Rennes, Douai</span>
+                    </div>
+                    <div class="company-actions">
+                        <a href="#" class="view-jobs">Voir les postes</a>
+                        <button class="follow-btn">Suivre</button>
+                    </div>
+                </div>
+
+                <!-- Company 3 -->
+                <div class="company-card">
+                    <div class="company-card-header">
+                        <div class="company-logo">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div>
+                            <h3 class="company-name">Sanofi</h3>
+                            <p class="company-slogan">Empowering Life</p>
+                        </div>
+                    </div>
+                    <span class="company-industry">Pharmaceutique</span>
+                    <div class="company-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">23,000+</div>
+                            <div class="stat-label">Employés</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">Postes ouverts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.3</div>
+                            <div class="stat-label">Note</div>
+                        </div>
+                    </div>
+                    <p class="company-bio">
+                        Sanofi est un leader mondial de la santé, dédié à la recherche et au développement de solutions thérapeutiques innovantes pour améliorer la vie des patients.
+                    </p>
+                    <div class="company-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris, Lyon, Montpellier</span>
+                    </div>
+                    <div class="company-actions">
+                        <a href="#" class="view-jobs">Voir les postes</a>
+                        <button class="follow-btn">Suivre</button>
+                    </div>
+                </div>
+
+                <!-- Company 4 -->
+                <div class="company-card">
+                    <div class="company-card-header">
+                        <div class="company-logo">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div>
+                            <h3 class="company-name">Air France</h3>
+                            <p class="company-slogan">Faire du ciel le plus bel endroit</p>
+                        </div>
+                    </div>
+                    <span class="company-industry">Aérien</span>
+                    <div class="company-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">44,000+</div>
+                            <div class="stat-label">Employés</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">45</div>
+                            <div class="stat-label">Postes ouverts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.0</div>
+                            <div class="stat-label">Note</div>
+                        </div>
+                    </div>
+                    <p class="company-bio">
+                        Compagnie aérienne française leader, Air France connecte la France au monde avec excellence et savoir-faire à la française.
+                    </p>
+                    <div class="company-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris CDG, Orly, Roissy</span>
+                    </div>
+                    <div class="company-actions">
+                        <a href="#" class="view-jobs">Voir les postes</a>
+                        <button class="follow-btn">Suivre</button>
+                    </div>
+                </div>
+
+                <!-- Company 5 -->
+                <div class="company-card">
+                    <div class="company-card-header">
+                        <div class="company-logo">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div>
+                            <h3 class="company-name">LVMH</h3>
+                            <p class="company-slogan">L'art du luxe français</p>
+                        </div>
+                    </div>
+                    <span class="company-industry">Luxe & Mode</span>
+                    <div class="company-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">39,000+</div>
+                            <div class="stat-label">Employés</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">38</div>
+                            <div class="stat-label">Postes ouverts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.4</div>
+                            <div class="stat-label">Note</div>
+                        </div>
+                    </div>
+                    <p class="company-bio">
+                        Leader mondial du luxe, LVMH regroupe 75 maisons prestigieuses comme Louis Vuitton, Dior, Moët & Chandon. Rejoignez l'excellence à la française.
+                    </p>
+                    <div class="company-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris, Genève, Milan</span>
+                    </div>
+                    <div class="company-actions">
+                        <a href="#" class="view-jobs">Voir les postes</a>
+                        <button class="follow-btn">Suivre</button>
+                    </div>
+                </div>
+
+                <!-- Company 6 -->
+                <div class="company-card">
+                    <div class="company-card-header">
+                        <div class="company-logo">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div>
+                            <h3 class="company-name">Orange</h3>
+                            <p class="company-slogan">L'essentiel à portée de main</p>
+                        </div>
+                    </div>
+                    <span class="company-industry">Télécoms</span>
+                    <div class="company-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">57,000+</div>
+                            <div class="stat-label">Employés</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">52</div>
+                            <div class="stat-label">Postes ouverts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3.9</div>
+                            <div class="stat-label">Note</div>
+                        </div>
+                    </div>
+                    <p class="company-bio">
+                        Opérateur télécoms leader en France, Orange développe les réseaux de nouvelle génération (5G, fibre) et les services numériques innovants.
+                    </p>
+                    <div class="company-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris, Lyon, Lille</span>
+                    </div>
+                    <div class="company-actions">
+                        <a href="#" class="view-jobs">Voir les postes</a>
+                        <button class="follow-btn">Suivre</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <i class="fas fa-gem"></i> Khademny
+                </div>
+                <p class="footer-tagline">
+                    Votre partenaire de confiance pour trouver le talent idéal ou l'opportunité parfaite.
+                    Nous connectons les entreprises aux meilleurs professionnels.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Liens Rapides</h3>
+                <ul class="footer-links">
+                    <li><a href="/" class="footer-link"><i class="fas fa-chevron-right"></i>Accueil</a></li>
+                    <li><a href="/offres" class="footer-link"><i class="fas fa-chevron-right"></i>Offres d'emploi</a></li>
+                    <li><a href="/entreprises" class="footer-link"><i class="fas fa-chevron-right"></i>Entreprises</a></li>
+                    <li><a href="/candidats" class="footer-link"><i class="fas fa-chevron-right"></i>Espace Candidat</a></li>
+                    <li><a href="/blog" class="footer-link"><i class="fas fa-chevron-right"></i>Blog Carrière</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Ressources</h3>
+                <ul class="footer-links">
+                    <li><a href="/aide" class="footer-link"><i class="fas fa-chevron-right"></i>Centre d'aide</a></li>
+                    <li><a href="/confidentialite" class="footer-link"><i class="fas fa-chevron-right"></i>Politique de confidentialité</a></li>
+                    <li><a href="/conditions" class="footer-link"><i class="fas fa-chevron-right"></i>Conditions d'utilisation</a></li>
+                    <li><a href="/faq" class="footer-link"><i class="fas fa-chevron-right"></i>FAQ</a></li>
+                    <li><a href="/mentions" class="footer-link"><i class="fas fa-chevron-right"></i>Mentions légales</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Contactez-nous</h3>
+                <div class="footer-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Rue de l'Innovation, 75000 Paris</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+33 1 23 45 67 89</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>contact@khademny.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Lun-Ven: 9h-18h</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Khademny. Tous droits réservés. | Conçu avec <i class="fas fa-heart" style="color: var(--accent);"></i> pour l'emploi</p>
+            <p style="margin-top: 5px; font-size: 0.8rem;">
+                <i class="fas fa-shield-alt"></i> Site sécurisé | <i class="fas fa-lock"></i> Vos données sont protégées
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Gestion du menu mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+        
+        menuToggle.addEventListener('click', () => {
+            navbarMenu.classList.toggle('active');
+            menuToggle.innerHTML = navbarMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        // Fermer le menu en cliquant sur un lien
+        document.querySelectorAll('.navbar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navbarMenu.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        // Filtrage des entreprises
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                // Supprimer la classe active de tous les tags
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                // Ajouter la classe active au tag cliqué
+                this.classList.add('active');
+                
+                const filter = this.textContent.toLowerCase();
+                const companies = document.querySelectorAll('.company-card');
+                
+                companies.forEach(company => {
+                    const industry = company.querySelector('.company-industry').textContent.toLowerCase();
+                    
+                    if (filter === 'tous' || industry.includes(filter)) {
+                        company.style.display = 'block';
+                        setTimeout(() => {
+                            company.style.opacity = '1';
+                            company.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        company.style.opacity = '0';
+                        company.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            company.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Suivre/Ne plus suivre les entreprises
+        document.querySelectorAll('.follow-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent === 'Suivre') {
+                    this.textContent = 'Suivi ✓';
+                    this.style.background = 'var(--gradient)';
+                    this.style.color = 'white';
+                    this.style.border = 'none';
+                    
+                    // Notification
+                    showNotification('Entreprise suivie avec succès!');
+                } else {
+                    this.textContent = 'Suivre';
+                    this.style.background = 'transparent';
+                    this.style.color = 'var(--primary)';
+                    this.style.border = '1px solid var(--primary)';
+                    
+                    // Notification
+                    showNotification('Vous ne suivez plus cette entreprise.');
+                }
+            });
+        });
+
+        // Fonction de notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--gradient);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+                z-index: 10000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Ajouter le style pour l'animation de notification
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
